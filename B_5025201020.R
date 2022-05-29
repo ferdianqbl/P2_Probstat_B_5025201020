@@ -27,6 +27,69 @@ t.test(dif, alternative = 'two.sided', mu = mean_dif)
 t.test(x_data, y_data, var.equal = TRUE)
 
 #--------------2-------------
+install.packages("BSDA")
+library(BSDA)
+#--A & C--
+# jawaban di README
+
+#--B--
+t_valB = (23500 - 20000) / (3900 / sqrt(100))
+p_valB = pt(t_valB, 99, lower.tail = TRUE)
+p_valB
+tsum.test(mean.x=23500, s.x=3900, n.x=100, mu=20000)
+
+
+#--------------3--------------
+mean_x = 3.64
+sd_x = 1.67
+n_x = 19
+mean_y = 2.79
+sd_y = 1.32
+n_y = 27
+df = n_x + n_y - 2
+
 #--A--
-z_scores <- (100-23500)/sd(100)
-z_scores
+# jawaban di README
+
+#--B--
+varianceSample = (((n_x-1)*(sd_x**2)) + ((n_y-1)*(sd_y**2))) / ((n_x-1) + (n_y-1))
+t_xy = (mean_x - mean_y) / (sqrt(varianceSample*((1/n_x) + (1/n_y))))
+
+t_xy
+
+tsum.test(mean.x=mean_x, 
+          s.x = sd_x, 
+          n.x = n_x, 
+          mean.y =mean_y, 
+          s.y = sd_y, 
+          n.y = n_y, 
+          alternative = "less", 
+          var.equal = TRUE)
+tsum.test(mean.x=mean_x, 
+          s.x = sd_x, 
+          n.x = n_x, 
+          mean.y =mean_y, 
+          s.y = sd_y, 
+          n.y = n_y, 
+          alternative = "greater", 
+          var.equal = TRUE)
+tsum.test(mean.x=mean_x, 
+          s.x = sd_x, 
+          n.x = n_x, 
+          mean.y =mean_y, 
+          s.y = sd_y, 
+          n.y = n_y, 
+          alternative = "two.sided", 
+          var.equal = TRUE)
+
+#--C--
+install.packages("mosaic")
+library(mosaic)
+
+plotDist(dist='t', df=2, col="red")
+
+#--D, E, & F--
+# jawaban di README
+
+
+

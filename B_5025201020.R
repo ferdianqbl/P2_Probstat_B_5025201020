@@ -92,4 +92,54 @@ plotDist(dist='t', df=2, col="red")
 # jawaban di README
 
 
+#---------------4----------------
+#--A--
+cats <- read.table(url("https://rstatisticsandresearch.weebly.com/uploads/1/0/2/6/1026585/onewayanova.txt"), header = T)
 
+group1 <- cats[cats["Group"]=="1",]
+group2 <- cats[cats["Group"]=="2",]
+group3 <- cats[cats["Group"]=="3",]
+
+qqnorm(y = group1$Length, col="blue")
+qqline(y = group1$Length, col="red")
+qqnorm(y = group2$Length, col="blue")
+qqline(y = group2$Length, col="red")
+qqnorm(y = group3$Length, col="blue")
+qqline(y = group3$Length, col="red")
+
+varianceGroup_1 = sd(group1$Length) ** 2
+varianceGroup_2 = sd(group2$Length) ** 2
+varianceGroup_3 = sd(group3$Length) ** 2
+
+varianceGroup_1
+varianceGroup_2
+varianceGroup_3
+
+#--B--
+bartlett.test(Length ~ Group, data = cats)
+
+#--C--
+model1 = lm(cats$Length ~ cats$Group)
+summary(model1)
+
+#--D--
+# jawaban di README
+
+#--E--
+mean_g1 = mean(group1$Length)
+mean_g2 = mean(group2$Length)
+mean_g3 = mean(group3$Length)
+
+mean_g1
+mean_g2
+mean_g3
+
+temp_aov <- aov(Length~factor(Group), data = cats)
+(TukeyHSD(temp_aov))
+
+#--F--
+#install.packages("ggplot2")
+library(ggplot2)
+ggplot(cats, aes(x=Group, y=Length)) + 
+  geom_point() + geom_smooth(aes(x=Group, y=Length)) + 
+  labs(title="Cats Visualization", x="Group", y="Length (cm)")

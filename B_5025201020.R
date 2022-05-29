@@ -6,6 +6,8 @@ for(i in 1:9)
   dif[i] <- y_data[i] - x_data[i]
 
 #--A--
+sd(x_data)
+sd(y_data)
 sd(dif)
 
 # --B--
@@ -17,11 +19,12 @@ t_val = (mean_sample_data - mean_dif) / (total_sd / sqrt(total_n))
 p_val = pt(t_val, total_n-1, lower.tail = TRUE)
 p_val
 
-#--C--
-install.packages("BSDA")
-library(BSDA)
-t.test(dif, alternative = 'two.sided', mu = mean_dif)
+t.test(x_data, y_data, alternative = "greater", var.equal = FALSE)
 
+#--C--
+var.test(x_data, y_data)
+t.test(dif, alternative = 'two.sided', mu = mean_dif)
+t.test(x_data, y_data, var.equal = TRUE)
 
 #--------------2-------------
 #--A--

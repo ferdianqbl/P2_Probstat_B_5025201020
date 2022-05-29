@@ -170,7 +170,16 @@ Mencari Sample Statistik dilakukan dengan mengetahui `SampleVariance` terlebih d
 ## C.
 > Lakukan Uji Statistik (df = 2)
 
+``` R
+install.packages("mosaic")
+library(mosaic)
+
+plotDist(dist='t', df=2, col="red")
+```
+
 ![3](screenshoots/3C.png)
+
+Fungsi `plotDist` dapat digunakan untuk memvisualisasikan Uji statistik berdasarkan df yang diminta
 
 ### D.
 > Nilai Kritikal

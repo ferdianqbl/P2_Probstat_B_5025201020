@@ -170,6 +170,8 @@ Mencari Sample Statistik dilakukan dengan mengetahui `SampleVariance` terlebih d
 ## C.
 > Lakukan Uji Statistik (df = 2)
 
+![3](screenshoots/3C.png)
+
 ### D.
 > Nilai Kritikal
 
@@ -319,11 +321,67 @@ dilakukan sebanyak 27 kali dan didapat data sebagai berikut: Data Hasil Eksperim
 
 ### A.
 > Buatlah plot sederhana untuk visualisasi data
+``` R
+id <- "1aLUOdw_LVJq6VQrQEkuQhZ8FW43FemTJ"
+gtl <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download", id))
+
+groupA <- gtl[gtl["Glass"]=="A",]
+groupB <- gtl[gtl["Glass"]=="B",]
+groupC <- gtl[gtl["Glass"]=="C",]
+
+ggplot(data = gtl, mapping = aes(x=Temp, y=Light, color=Glass)) + geom_point() + scale_color_manual(breaks = c("A", "B", "C"), values=c("yellow", "blue", "red"))
+```
+![3](screenshoots/5A.png)
+
+Setelah melakukan import data dari gdrive, plot dapat dibuat dengan fungsi `ggplot`
+
 ### B.
 > Lakukan uji ANOVA dua arah
+
+``` R
+gtlAov <- aov(Light ~ Glass*Temp, data = gtl)
+summary(gtlAov)
+
+```
+
+![3](screenshoots/5B.jpg)
+
+Anova dapat dicari menggunakan fungsi `aov()` dengan parameter tiap kolom dan datanya.
+
 ### C.
 > Tampilkan tabel dengan mean dan standar deviasi keluaran cahaya untuk setiap perlakuan (kombinasi kaca pelat muka dan suhu operasi)
+
+```R
+result <- group_by(gtl, Glass, Temp) %>%
+  summarise(mean=mean(Light), standarDeviasi=sd(Light)) %>%
+  arrange(desc(mean))
+result
+```
+![3](screenshoots/5C.jpg)
+
+Tabel untuk menampilkan mean dan standar deviasi dapat dilakukan dengan mengelompokkan data berdasarkan kolom, kemudian membuat summarise dengan paramenter mean dan standar deviasinya.
 ### D.
 > Lakukan uji Tukey
+
+``` R
+gtlTukey <- TukeyHSD(gtlAov)
+gtlTukey
+```
+
+![3](screenshoots/5D.jpg)
+
+Nilai tukey dapat dicari dengan mengetahui anova dengan `aov()`, lalu menggunakan fungsi `TukeyHSD()`.
+
 ### E.
 > Gunakan compact letter display untuk menunjukkan perbedaan signifikan antara uji Anova dan uji Tukey
+
+``` R
+library(multcompView)
+gtl$Glass <- as.factor(gtl$Glass)
+gtl$Temp <- as.factor(gtl$Temp)
+gtlCld <- multcompLetters4(aov(Light ~ Glass*Temp, data = gtl), TukeyHSD(aov(Light ~ Glass*Temp, data = gtl)))
+gtlCld
+```
+![3](screenshoots/5E.jpg)
+
+Fungsi `multcompLetters4` digunakan untuk mendapatkan perbedaan antara uji anova dan uji tukey

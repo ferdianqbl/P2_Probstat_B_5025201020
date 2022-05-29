@@ -143,3 +143,42 @@ library(ggplot2)
 ggplot(cats, aes(x=Group, y=Length)) + 
   geom_point() + geom_smooth(aes(x=Group, y=Length)) + 
   labs(title="Cats Visualization", x="Group", y="Length (cm)")
+
+
+
+#------------5------------
+#--A--
+library(ggplot2)
+id <- "1aLUOdw_LVJq6VQrQEkuQhZ8FW43FemTJ"
+gtl <- read.csv(sprintf("https://docs.google.com/uc?id=%s&export=download", id))
+
+groupA <- gtl[gtl["Glass"]=="A",]
+groupB <- gtl[gtl["Glass"]=="B",]
+groupC <- gtl[gtl["Glass"]=="C",]
+
+ggplot(data = gtl, mapping = aes(x=Temp, y=Light, color=Glass)) + geom_point() + scale_color_manual(breaks = c("A", "B", "C"), values=c("yellow", "blue", "red"))
+
+#--B--
+gtlAov <- aov(Light ~ Glass*Temp, data = gtl)
+summary(gtlAov)
+
+#--C--
+result <- group_by(gtl, Glass, Temp) %>%
+  summarise(mean=mean(Light), standarDeviasi=sd(Light)) %>%
+  arrange(desc(mean))
+result
+
+#--D--
+gtlTukey <- TukeyHSD(gtlAov)
+
+
+#--E--
+#install.packages("multcompView")
+library(multcompView)
+gtl$Glass <- as.factor(gtl$Glass)
+gtl$Temp <- as.factor(gtl$Temp)
+gtlCld <- multcompLetters4(aov(Light ~ Glass*Temp, data = gtl), TukeyHSD(aov(Light ~ Glass*Temp, data = gtl)))
+gtlCld
+
+
+
